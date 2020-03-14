@@ -1,0 +1,55 @@
+#MainViewDiv{
+    margin: auto;
+    text-align: center;
+    padding-top: 280px;
+    background-color: blue;
+    min-height: 100vh;
+    z-index: 2;
+}
+
+#MainViewTitle {
+    color: white;
+    font-family: Georgia;
+    padding-bottom: 35px;
+}
+
+#MainViewText {
+    width: 40%;
+    margin: auto;
+}
+
+#MainViewText {
+    color: rgb(218, 216, 216);
+}
+
+#MainViewButtonDiv{
+    padding: 35px 0 20px 0;
+}
+
+#MainViewButtons{
+    padding: 10px 0 10px 0;
+}
+
+#MainViewButtons button{
+    width: 220px;
+}
+
+@Media only screen and (max-width: 840px){
+    #MainViewDiv{
+        margin: auto;
+        text-align: center;
+        padding-top: 100px;
+        min-height: 100vh;
+    }
+    #MainViewTitle {
+        font-size: 40px;
+        padding-bottom: 35px;
+    }
+
+
+    #MainViewText {
+        width: 80%;
+        margin: auto;
+    }
+}
+
