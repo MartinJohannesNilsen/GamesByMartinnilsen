@@ -1,10 +1,17 @@
 import React, { Component } from 'react';
-import fire from '../fire';
+import firebase from 'firebase';
+import firebaseConfig from '../firebaseConfig';
 import '../Css/Dataadministration.css';
 
 class DataadministrationView extends Component {
   componentDidMount(){
-    window.scrollTo(0,0);
+    /*
+    * First I will have to send the users to the login and authentificate them using google uid
+    * Then I will have to .then, if they not authentificate they will be redirected to "/"
+    * If they are logged in they will be redirected to the datamanagement
+    */
+    
+    
   }
   
   render() {
@@ -44,9 +51,9 @@ class NeverHaveIEverOverview extends Component{
     this.state = { statements: [] }; 
     this.removeStatement.bind(this)
   }
-  componentWillMount(){
+  componentDidMount(){
     let amountOfStatements = 0;
-    let messagesRef = fire.database().ref('neverHaveIEver').orderByKey().limitToLast(1000);
+    let messagesRef = firebaseConfig.database().ref('neverHaveIEver').orderByKey().limitToLast(1000);
     messagesRef.on('child_added', snapshot => {
       amountOfStatements++;
       let message = { text: snapshot.val(), id: amountOfStatements, db_id: snapshot.key };
@@ -60,13 +67,13 @@ class NeverHaveIEverOverview extends Component{
   addStatement(e){
     e.preventDefault();
     if(this.inputStatement.value.trim() !== ""){
-      fire.database().ref('neverHaveIEver').push( this.inputStatement.value );
+      firebaseConfig.database().ref('neverHaveIEver').push( this.inputStatement.value );
       this.inputStatement.value = '';
     }
   }
 
   removeStatement(statementId){
-    let dataRef = fire.database().ref('neverHaveIEver/'+statementId);
+    let dataRef = firebaseConfig.database().ref('neverHaveIEver/'+statementId);
     dataRef.remove();
   }
   
@@ -113,9 +120,9 @@ class TruthOrDareOverview extends Component{
     this.state = { statements: [] };
     this.removeStatement.bind(this)
   }
-  componentWillMount(){
+  componentDidMount(){
     let amountOfStatements = 0;
-    let messagesRef = fire.database().ref('truthOrDare').orderByKey().limitToLast(1000);
+    let messagesRef = firebaseConfig.database().ref('truthOrDare').orderByKey().limitToLast(1000);
     messagesRef.on('child_added', snapshot => {
       amountOfStatements++;
       let message = { type: snapshot.val().type, text: snapshot.val().text, id: amountOfStatements, db_id: snapshot.key };
@@ -131,7 +138,7 @@ class TruthOrDareOverview extends Component{
     var choiceBox = document.getElementById("choiceTruthOrDare");
     var choiceSelected = choiceBox.options[choiceBox.selectedIndex].text;
     if(this.inputStatement.value.trim() !== ""){
-      fire.database().ref('truthOrDare').push({
+      firebaseConfig.database().ref('truthOrDare').push({
         type: choiceSelected,
         text: this.inputStatement.value
       });
@@ -140,7 +147,7 @@ class TruthOrDareOverview extends Component{
   }
 
   removeStatement(statementId){
-    let dataRef = fire.database().ref('truthOrDare/'+statementId);
+    let dataRef = firebaseConfig.database().ref('truthOrDare/'+statementId);
     dataRef.remove();
   }
   
@@ -193,9 +200,9 @@ class PointTowardsWhoOverview extends Component{
     this.state = { statements: [] }; 
     this.removeStatement.bind(this)
   }
-  componentWillMount(){
+  componentDidMount(){
     let amountOfStatements = 0;
-    let messagesRef = fire.database().ref('pointTowardsWhoHas').orderByKey().limitToLast(1000);
+    let messagesRef = firebaseConfig.database().ref('pointTowardsWhoHas').orderByKey().limitToLast(1000);
     messagesRef.on('child_added', snapshot => {
       amountOfStatements++;
       let message = { text: snapshot.val(), id: amountOfStatements, db_id: snapshot.key };
@@ -209,13 +216,13 @@ class PointTowardsWhoOverview extends Component{
   addStatement(e){
     e.preventDefault();
     if(this.inputStatement.value.trim() !== ""){
-      fire.database().ref('pointTowardsWhoHas').push( this.inputStatement.value );
+      firebaseConfig.database().ref('pointTowardsWhoHas').push( this.inputStatement.value );
       this.inputStatement.value = ''; 
     }
   }
 
   removeStatement(statementId){
-    let dataRef = fire.database().ref('pointTowardsWhoHas/'+statementId);
+    let dataRef = firebaseConfig.database().ref('pointTowardsWhoHas/'+statementId);
     dataRef.remove();
   }
   

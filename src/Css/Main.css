@@ -1,21 +1,23 @@
 #MainViewDiv{
     margin: auto;
     text-align: center;
-    padding-top: 280px;
-    background-color: blue;
+    padding-top: 25vh;
+    /*background-color: blue;*/
+    background-color: rgb(25, 82, 118);
     min-height: 100vh;
     z-index: 2;
 }
 
 #MainViewTitle {
-    color: white;
-    font-family: Georgia;
+    color: rgb(255, 95, 21);
+    font-family: Arial, Helvetica, sans-serif;
     padding-bottom: 35px;
 }
 
 #MainViewText {
     width: 40%;
     margin: auto;
+    padding: 0 0 0 40px;
 }
 
 #MainViewText {
@@ -23,7 +25,7 @@
 }
 
 #MainViewButtonDiv{
-    padding: 35px 0 20px 0;
+    padding: 50px 0 20px 0;
 }
 
 #MainViewButtons{
@@ -38,7 +40,7 @@
     #MainViewDiv{
         margin: auto;
         text-align: center;
-        padding-top: 100px;
+        padding-top: 25vh;
         min-height: 100vh;
     }
     #MainViewTitle {
@@ -52,4 +54,5 @@
         margin: auto;
     }
 }
+
 
