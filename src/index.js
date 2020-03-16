@@ -5,7 +5,7 @@ import * as serviceWorker from './serviceWorker';
 //import $ from 'jquery';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import 'bootstrap/dist/js/bootstrap.bundle.min';
-import './Css/index.css';
+import './Styles/index.scss';
 
 import DataadministrationView from './Views/DataadministrationView';
 import MainView from './Views/MainView';

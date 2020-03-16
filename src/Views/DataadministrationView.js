@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import firebase from 'firebase';
 import firebaseConfig from '../firebaseConfig';
-import '../Css/Dataadministration.css';
+import '../Styles/Dataadministration.scss';
 
 class DataadministrationView extends Component {
   componentDidMount(){
@@ -53,7 +53,7 @@ class NeverHaveIEverOverview extends Component{
   }
   componentDidMount(){
     let amountOfStatements = 0;
-    let messagesRef = firebaseConfig.database().ref('neverHaveIEver').orderByKey().limitToLast(1000);
+    let messagesRef = firebaseConfig.database().ref('neverHaveIEver').orderByValue().limitToLast(1000);
     messagesRef.on('child_added', snapshot => {
       amountOfStatements++;
       let message = { text: snapshot.val(), id: amountOfStatements, db_id: snapshot.key };
@@ -202,7 +202,7 @@ class PointTowardsWhoOverview extends Component{
   }
   componentDidMount(){
     let amountOfStatements = 0;
-    let messagesRef = firebaseConfig.database().ref('pointTowardsWhoHas').orderByKey().limitToLast(1000);
+    let messagesRef = firebaseConfig.database().ref('pointTowardsWho').orderByKey().limitToLast(1000);
     messagesRef.on('child_added', snapshot => {
       amountOfStatements++;
       let message = { text: snapshot.val(), id: amountOfStatements, db_id: snapshot.key };
@@ -216,13 +216,13 @@ class PointTowardsWhoOverview extends Component{
   addStatement(e){
     e.preventDefault();
     if(this.inputStatement.value.trim() !== ""){
-      firebaseConfig.database().ref('pointTowardsWhoHas').push( this.inputStatement.value );
+      firebaseConfig.database().ref('pointTowardsWho').push( this.inputStatement.value );
       this.inputStatement.value = ''; 
     }
   }
 
   removeStatement(statementId){
-    let dataRef = firebaseConfig.database().ref('pointTowardsWhoHas/'+statementId);
+    let dataRef = firebaseConfig.database().ref('pointTowardsWho/'+statementId);
     dataRef.remove();
   }
   

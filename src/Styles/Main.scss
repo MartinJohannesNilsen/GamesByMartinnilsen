@@ -1,27 +1,42 @@
+$blueColor: rgb(25, 82, 118);
+$darkBlueColor: rgb(19, 68, 101);
+$orangeColor: rgb(255, 95, 21);
+$whiteColor: white;
+
+body{
+    background-color: $blueColor;
+}
+
+.Particles{
+    height: 100vh;
+    width: 100vw;
+    position: absolute !important;
+    z-index: 1;
+}
+
 #MainViewDiv{
     margin: auto;
     text-align: center;
     padding-top: 25vh;
     /*background-color: blue;*/
-    background-color: rgb(25, 82, 118);
     min-height: 100vh;
     z-index: 2;
 }
 
 #MainViewTitle {
-    color: rgb(255, 95, 21);
+    color: $orangeColor;
+    font-weight: bold;
     font-family: Arial, Helvetica, sans-serif;
-    padding-bottom: 35px;
+    padding: 0 0 0 0;
+    z-index: 2;
 }
 
 #MainViewText {
     width: 40%;
     margin: auto;
-    padding: 0 0 0 40px;
-}
-
-#MainViewText {
     color: rgb(218, 216, 216);
+    padding: 10px 0 0 40px;
+    z-index: 2;
 }
 
 #MainViewButtonDiv{
@@ -29,12 +44,17 @@
 }
 
 #MainViewButtons{
-    padding: 10px 0 10px 0;
+    padding: 15px 0 15px 0;
 }
 
-#MainViewButtons button{
+#MainViewButtonsDesign{
     width: 220px;
+    z-index: 2;
+    background-color: $darkBlueColor;
+    color: $whiteColor;
 }
+
+
 
 @Media only screen and (max-width: 840px){
     #MainViewDiv{
@@ -43,16 +63,10 @@
         padding-top: 25vh;
         min-height: 100vh;
     }
-    #MainViewTitle {
-        font-size: 40px;
-        padding-bottom: 35px;
-    }
-
 
     #MainViewText {
         width: 80%;
         margin: auto;
     }
 }
-
 

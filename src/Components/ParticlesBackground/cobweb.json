@@ -1,0 +1,17 @@
+{
+    "particles": {
+        "number": {
+            "value": 110,
+            "density": {
+                "enable": true,
+                "value_area": 600
+            }
+        },
+        "opacity": {
+            "value": 0.3
+        },
+        "line_linked": {
+            "opacity": 0.2
+        }
+    }
+}

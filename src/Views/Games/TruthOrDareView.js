@@ -1,19 +1,64 @@
 import React, { Component } from 'react';
-import '../../Css/Main.css';
+import firebase from 'firebase';
+import firebaseConfig from '../../firebaseConfig';
+import '../../Styles/Games/truthOrDare.scss';
+import IconButton from '@material-ui/core/IconButton';
+import Button from '@material-ui/core/Button';
+import ArrowBack from '@material-ui/icons/ArrowBack';
+import ArrowBackIos from '@material-ui/icons/ArrowBackIos';
+
 
 class TruthOrDareView extends Component {
-    
+    constructor(props) {
+        super(props);
+        this.state = { questions: [], dares: [], shownText: "går ut på enten å ta en utfordring eller å svare ærlig på et spørsmål", shownTitle: "Nødt eller Sannhet"}; 
+        this.showNewText.bind(this);
+    }
     componentDidMount(){
         window.scrollTo(0,0);
+        let dbRef = firebaseConfig.database().ref('truthOrDare').orderByKey().limitToLast(1000);
+        dbRef.once('value', snapshot => {
+            snapshot.forEach(childSnap => {
+                if(childSnap.val().type == 'Sannhet'){
+                    this.setState({ questions: [childSnap.val().text].concat(this.state.questions) });
+                }else if(childSnap.val().type == 'Nødt'){
+                    this.setState({ dares: [childSnap.val().text].concat(this.state.dares) });
+                }
+                console.log(childSnap.val());
+            });
+        });
     }
 
-    render() {  
+    showNewText(isTruth){
+        if(isTruth){
+            let randomNumber = Math.floor(Math.random() * this.state.questions.length);
+            this.setState({shownText: this.state.questions[randomNumber], shownTitle: "Helt ærlig,"});
+        }else{
+            let randomNumber = Math.floor(Math.random() * this.state.dares.length);
+            this.setState({shownText: this.state.dares[randomNumber], shownTitle: "Du er nødt til å"});
+        }
+    } 
+
+
+    render() { 
         return (
             <div>
-                <div id="MainViewDiv">
-                    <div id="MainViewTitle"><h1>Nødt eller sannhet</h1></div>
-                    <div id="MainViewText"><h4>Enkle drikkeleker laget av Martin Johannes Nilsen</h4></div>
-                    
+                <div id="truthOrDareContainer">
+                    <div>
+                        <IconButton aria-label="back" id="truthOrDareBackButton" size="large" onClick={() => window.location.href="/"}>
+                            <ArrowBackIos fontSize="inherit" id="truthOrDareBackButtonIcon"/>
+                        </IconButton>  
+                    </div>
+                    <div id="truthOrDareTitleDiv">
+                        <h1>{this.state.shownTitle}</h1>
+                    </div>
+                    <div id="truthOrDareStatementDiv">
+                        <h2>{this.state.shownText}</h2>
+                    </div>
+                    <div id="truthOrDareNextStatementButton">
+                        <Button variant="contained" onClick={() => this.showNewText(false)}>Nødt</Button>
+                        <Button variant="contained" onClick={() => this.showNewText(true)}>Sannhet</Button>
+                    </div>
                 </div>
             </div>
         )
