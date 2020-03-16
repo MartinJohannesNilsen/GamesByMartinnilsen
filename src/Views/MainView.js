@@ -19,7 +19,7 @@ class MainView extends Component {
             <div>
                 <Particles params={particlesOpt} canvasClassName="Particles" />
                 <div id="MainViewDiv">
-                    <div id="MainViewTitle"><h1>DRIKKELEKER</h1></div>
+                    <div id="MainViewTitle"><h1>GRUPPELEKER</h1></div>
                     <div id="MainViewText"><h4>av Martin Johannes Nilsen</h4></div>
                     <div id="MainViewButtonDiv"> 
                         <div id="MainViewButtons">

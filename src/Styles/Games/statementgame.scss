@@ -45,6 +45,7 @@ $whiteColor: white;
         width: 100%;
         height: 50px;
         font-size: 18px;
+        border-radius: 0px;
     }
 }
 
@@ -72,7 +73,6 @@ $whiteColor: white;
         width: 80%;
         margin: auto;
         bottom: 50px;
-
         Button {
             font-size: 14px;
         }
