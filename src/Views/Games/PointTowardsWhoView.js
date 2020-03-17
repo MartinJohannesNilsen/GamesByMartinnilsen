@@ -11,7 +11,7 @@ import ArrowBackIos from '@material-ui/icons/ArrowBackIos';
 class PointTowardsWhoView extends Component {
     constructor(props) {
         super(props);
-        this.state = { statements: [], shownStatement: "går ut på at man på 3 skal peke på den man synes påstanden basser best til"}; 
+        this.state = { statements: [], statementNumber: 0, shownStatement: "går ut på at man på 3 skal peke på den man synes påstanden passer best til"}; 
         this.showNewStatement.bind(this);
     }
     componentDidMount(){
@@ -20,21 +20,22 @@ class PointTowardsWhoView extends Component {
         dbRef.once('value', snapshot => {
             snapshot.forEach(childSnap => {
                 let s = {text: childSnap.val()}
-                console.log(s);
                 this.setState({ statements: [s].concat(this.state.statements) });
             });
+            let randomNumber = Math.floor(Math.random() * this.state.statements.length);
+            this.setState({statementNumber: randomNumber});
         });
     }
 
     showNewStatement(){
-        let randomNumber = Math.floor(Math.random() * this.state.statements.length);
-
-        if(this.state.statements.length!=null){
-            while(this.state.shownStatement == this.state.statements[randomNumber] || this.state.statements[randomNumber] == undefined){
-                randomNumber = Math.floor(Math.random() * this.state.statements.length);
-            }
+        if(this.state.statementNumber == this.state.statements.length){
+            this.setState({statementNumber: 1});
+        }else{
+            this.setState({statementNumber: (this.state.statementNumber+1)});
         }
-        this.setState({shownStatement: this.state.statements[randomNumber].text});
+        let s = this.state.statementNumber;
+        let newStatement = this.state.statements[(s-1)].text;
+        this.setState({shownStatement: newStatement});
     } 
 
 
@@ -57,7 +58,7 @@ class PointTowardsWhoView extends Component {
                         <h2>{this.state.shownStatement}</h2>
                     </div>
                     <div id="statementgameNextStatementButton">
-                        <Button variant="contained" onClick={() => this.showNewStatement()}>Neste påstand</Button>
+                        <Button variant="contained" disabled={this.state.statements.length==0} onClick={() => this.showNewStatement()}>Neste påstand</Button>
                     </div>
                 </div>
             </div>

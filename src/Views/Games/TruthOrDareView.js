@@ -11,7 +11,7 @@ import ArrowBackIos from '@material-ui/icons/ArrowBackIos';
 class TruthOrDareView extends Component {
     constructor(props) {
         super(props);
-        this.state = { questions: [], dares: [], shownText: "går ut på enten å ta en utfordring eller å svare ærlig på et spørsmål", shownTitle: "Nødt eller Sannhet"}; 
+        this.state = { questions: [], dares: [], dareNumber: 0, questionNumber: 0, shownText: "går ut på enten å ta en utfordring eller å svare ærlig på et spørsmål", shownTitle: "Nødt eller Sannhet"}; 
         this.showNewText.bind(this);
     }
     componentDidMount(){
@@ -24,18 +24,32 @@ class TruthOrDareView extends Component {
                 }else if(childSnap.val().type == 'Nødt'){
                     this.setState({ dares: [childSnap.val().text].concat(this.state.dares) });
                 }
-                console.log(childSnap.val());
             });
+            let randomNumberDares = Math.floor(Math.random() * this.state.dares.length);
+            let randomNumberQuestions = Math.floor(Math.random() * this.state.questions.length);
+            this.setState({dareNumber: randomNumberDares, questionNumber: randomNumberQuestions});
         });
     }
 
     showNewText(isTruth){
         if(isTruth){
-            let randomNumber = Math.floor(Math.random() * this.state.questions.length);
-            this.setState({shownText: this.state.questions[randomNumber], shownTitle: "Helt ærlig,"});
+            if(this.state.questionNumber == this.state.questions.length){
+                this.setState({questionNumber: 1});
+            }else{
+                this.setState({questionNumber: (this.state.questionNumber+1)});
+            }
+            let s = this.state.questionNumber;
+            let newText = this.state.questions[(s-1)];
+            this.setState({shownText: newText, shownTitle: "Helt ærlig,"});
         }else{
-            let randomNumber = Math.floor(Math.random() * this.state.dares.length);
-            this.setState({shownText: this.state.dares[randomNumber], shownTitle: "Du er nødt til å"});
+            if(this.state.dareNumber == this.state.dares.length){
+                this.setState({dareNumber: 1});
+            }else{
+                this.setState({dareNumber: (this.state.dareNumber+1)});
+            }
+            let s = this.state.dareNumber;
+            let newText = this.state.dares[(s-1)];
+            this.setState({shownText: newText, shownTitle: "Du er nødt til å"});
         }
     } 
 
@@ -56,8 +70,8 @@ class TruthOrDareView extends Component {
                         <h2>{this.state.shownText}</h2>
                     </div>
                     <div id="truthOrDareNextStatementButton">
-                        <Button variant="contained" onClick={() => this.showNewText(false)}>Nødt</Button>
-                        <Button variant="contained" onClick={() => this.showNewText(true)}>Sannhet</Button>
+                        <Button variant="contained" disabled={this.state.dares.length==0} onClick={() => this.showNewText(false)}>Nødt</Button>
+                        <Button variant="contained" disabled={this.state.questions.length==0} onClick={() => this.showNewText(true)}>Sannhet</Button>
                     </div>
                 </div>
             </div>

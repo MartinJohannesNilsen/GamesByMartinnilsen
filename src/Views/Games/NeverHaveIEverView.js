@@ -11,7 +11,7 @@ import ArrowBackIos from '@material-ui/icons/ArrowBackIos';
 class NeverHaveIEverView extends Component {
     constructor(props) {
         super(props);
-        this.state = { statements: [], shownStatement: "går ut på at man får en påstand og må være ærlig på om man har gjort det eller ikke"}; 
+        this.state = { statements: [], statementNumber: 0, shownStatement: "går ut på at man får en påstand og må være ærlig på om man har gjort det eller ikke"}; 
         this.showNewStatement.bind(this);
     }
     componentDidMount(){
@@ -22,23 +22,24 @@ class NeverHaveIEverView extends Component {
                 let s = {text: childSnap.val()}
                 this.setState({ statements: [s].concat(this.state.statements) });
             });
+            let randomNumber = Math.floor(Math.random() * this.state.statements.length);
+            this.setState({statementNumber: randomNumber});
         });
     }
 
     showNewStatement(){
-        let randomNumber = Math.floor(Math.random() * this.state.statements.length);
-        do{
-            randomNumber = Math.floor(Math.random() * this.state.statements.length);
+        if(this.state.statementNumber == this.state.statements.length){
+            this.setState({statementNumber: 1});
+        }else{
+            this.setState({statementNumber: (this.state.statementNumber+1)});
         }
-        while(this.state.shownStatement == this.state.statements[randomNumber] || this.state.statements[randomNumber] == undefined);
-        this.setState({shownStatement: this.state.statements[randomNumber].text});
+        let s = this.state.statementNumber;
+        let newStatement = this.state.statements[(s-1)].text;
+        this.setState({shownStatement: newStatement});
     } 
 
 
     render() { 
-
-          
-
         return (
             <div>
                 <div id="statementgameContainer">
@@ -54,7 +55,7 @@ class NeverHaveIEverView extends Component {
                         <h2>{this.state.shownStatement}</h2>
                     </div>
                     <div id="statementgameNextStatementButton">
-                        <Button variant="contained" onClick={() => this.showNewStatement()}>Neste påstand</Button>
+                        <Button variant="contained" disabled={this.state.statements.length==0} onClick={() => this.showNewStatement()}>Neste påstand</Button>
                     </div>
                 </div>
             </div>
