@@ -6,17 +6,25 @@ import IconButton from '@material-ui/core/IconButton';
 import Button from '@material-ui/core/Button';
 import ArrowBack from '@material-ui/icons/ArrowBack';
 import ArrowBackIos from '@material-ui/icons/ArrowBackIos';
-
+const categories = require('../../categories.json')
 
 class NeverHaveIEverView extends Component {
     constructor(props) {
         super(props);
-        this.state = { statements: [], statementNumber: 0, shownStatement: "går ut på at man får en påstand og må være ærlig på om man har gjort det eller ikke"}; 
+        var category = this.props.match.params.category;
+        var index = categories.findIndex(function(item, i){
+            return item.name === category
+        });
+        if(category === null || index === -1 ){
+            category = "random";
+        }
+        this.state = { statements: [], statementNumber: 0, shownStatement: "går ut på at man får en påstand og må være ærlig på om man har gjort det eller ikke", category: category}; 
         this.showNewStatement.bind(this);
     }
     componentDidMount(){
-        window.scrollTo(0,0);
-        let dbRef = firebaseConfig.database().ref('neverHaveIEver').orderByKey().limitToLast(1000);
+        window.scrollTo(0,0);          
+
+        let dbRef = firebaseConfig.database().ref('neverHaveIEver/'+this.state.category).orderByKey().limitToLast(1000);
         dbRef.once('value', snapshot => {
             snapshot.forEach(childSnap => {
                 let s = {text: childSnap.val()}

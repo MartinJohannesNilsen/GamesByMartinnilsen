@@ -1,0 +1,12 @@
+[
+    {
+        "showName": "Vanlig",
+        "name": "random",
+        "description": "Litt fra alle kategoriene, inkludert 18+"  
+    },
+    {
+        "showName": "Barnevennlig",
+        "name": "childfriendly",
+        "description": "Inneholder ikke seksualitet og/eller andre ting uegnet for barn"  
+    }
+]

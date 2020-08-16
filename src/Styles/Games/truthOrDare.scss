@@ -41,12 +41,17 @@ $whiteColor: white;
     left: 0;
     right: 0;
     bottom: 20vh;
+    
     Button {
         background-color:rgb(220, 220, 220);
         width: 100%;
         height: 50px;
         font-size: 18px;
         border-radius: 0px;
+    }
+
+    :hover{
+        z-index: 3;
     }
 }
 

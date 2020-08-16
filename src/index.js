@@ -2,7 +2,6 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import {Route, BrowserRouter, Switch} from 'react-router-dom';
 import * as serviceWorker from './serviceWorker';
-//import $ from 'jquery';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import 'bootstrap/dist/js/bootstrap.bundle.min';
 import './Styles/index.scss';
@@ -18,10 +17,13 @@ ReactDOM.render(
         <Route path='/'>
          <div>
             <Switch>
-              <Route path='/manageData' component={DataadministrationView} exact />
+              <Route path='/manageData/:id' component={DataadministrationView}/>
+              <Route path='/manageData' component={DataadministrationView}/>
+              <Route path='/neverHaveIEver/:category' component={NeverHaveIEverView} />
               <Route path='/neverHaveIEver' component={NeverHaveIEverView} />
+              <Route path='/truthOrDare/:category' component={TruthOrDareView} />
               <Route path='/truthOrDare' component={TruthOrDareView} />
-              <Route path='/pointTowardsWho' component={PointTowardsWhoView} />
+              <Route path='/pointTowardsWho/:category' component={PointTowardsWhoView} />
               <Route path='/' component={MainView} />
             </Switch>
          </div>

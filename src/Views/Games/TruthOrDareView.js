@@ -6,17 +6,24 @@ import IconButton from '@material-ui/core/IconButton';
 import Button from '@material-ui/core/Button';
 import ArrowBack from '@material-ui/icons/ArrowBack';
 import ArrowBackIos from '@material-ui/icons/ArrowBackIos';
-
+const categories = require('../../categories.json')
 
 class TruthOrDareView extends Component {
     constructor(props) {
         super(props);
-        this.state = { questions: [], dares: [], dareNumber: 0, questionNumber: 0, shownText: "går ut på enten å ta en utfordring eller å svare ærlig på et spørsmål", shownTitle: "Nødt eller Sannhet"}; 
+        var category = this.props.match.params.category;
+        var index = categories.findIndex(function(item, i){
+            return item.name === category
+        });
+        if(category === null || index === -1 ){
+            category = "random";
+        }
+        this.state = { questions: [], dares: [], dareNumber: 0, questionNumber: 0, shownText: "går ut på enten å ta en utfordring eller å svare ærlig på et spørsmål", shownTitle: "Nødt eller Sannhet", category: category}; 
         this.showNewText.bind(this);
     }
     componentDidMount(){
         window.scrollTo(0,0);
-        let dbRef = firebaseConfig.database().ref('truthOrDare').orderByKey().limitToLast(1000);
+        let dbRef = firebaseConfig.database().ref('truthOrDare/'+this.state.category).orderByKey().limitToLast(1000);
         dbRef.once('value', snapshot => {
             snapshot.forEach(childSnap => {
                 if(childSnap.val().type == 'Sannhet'){

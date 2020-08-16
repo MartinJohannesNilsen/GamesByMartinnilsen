@@ -77,6 +77,13 @@
 border-bottom: 4px solid rgb(255, 255, 255);
 }
 
+#categoryBox{
+  min-height: 70px;
+  width: 100%;
+  margin: auto 10px;
+  background-color: red($color: #be3434)
+}
+
 @Media only screen and (max-width: 800px){
   #registerNewDataBackground{
     padding: 40px 0 0 0;

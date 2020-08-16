@@ -1,46 +1,70 @@
-import React, { Component } from 'react';
+import React, { Component, useState } from 'react';
 import firebase from 'firebase';
 import firebaseConfig from '../firebaseConfig';
 import '../Styles/Dataadministration.scss';
+import { Dropdown, DropdownToggle, DropdownMenu, DropdownItem } from 'reactstrap';
+import { Tooltip } from '@material-ui/core';
+const categories = require('../categories.json');
 
-class DataadministrationView extends Component {
-  componentDidMount(){
-    /*
-    * First I will have to send the users to the login and authentificate them using google uid
-    * Then I will have to .then, if they not authentificate they will be redirected to "/"
-    * If they are logged in they will be redirected to the datamanagement
-    */
-    
-    
+const DataadministrationView = (props) => {
+  //Checks the url for chosen category against categories.json, if not found, random is chosen
+  const { match } = props;
+  var category = match.params.id;
+  var showName;
+  var index = categories.findIndex(function(item, i){
+    return item.name === category
+  });
+  if(category === null || index === -1 ){
+    category = "random";
+    showName = "Tilfeldig"
+  }else{
+    showName = categories[index].showName;
   }
-  
-  render() {
-    return (
-      <div id="registerNewDataBackground">
-        <h1>Dataadministrasjon</h1>
-        <div id="registerNewDataContainer">
-          <div id="registerNewDataTabsContainer">
-            <ul class="nav nav-pills" id="pills-tab" role="tablist">
-                <li class="nav-item">
-                    <a class="nav-link active" id="pills-Game1-tab" data-toggle="pill" href="#pills-Game1" role="tab" aria-controls="pills-Game1" aria-selected="true">Jeg har aldri</a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link" id="pills-Game2-tab" data-toggle="pill" href="#pills-Game2" role="tab" aria-controls="pills-Game2" aria-selected="false">Nødt eller sannhet</a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link" id="pills-Game3-tab" data-toggle="pill" href="#pills-Game3" role="tab" aria-controls="pills-Game3" aria-selected="false">Pekeleken</a>
-                </li>
-            </ul>
-            <div class="tab-content" id="pills-tabContent">
-              <div class="tab-pane fade show active" id="pills-Game1" role="tabpanel" aria-labelledby="pills-Game1-tab"><NeverHaveIEverOverview /></div>
-              <div class="tab-pane fade" id="pills-Game2" role="tabpanel" aria-labelledby="pills-Game 2-tab"><TruthOrDareOverview /></div>
-              <div class="tab-pane fade" id="pills-Game3" role="tabpanel" aria-labelledby="pills-Game3-tab"><PointTowardsWhoOverview /></div>
-            </div>
+
+  const [dropdownOpen, setDropdownOpen] = useState(false);
+  const toggle = () => setDropdownOpen(prevState => !prevState);    
+
+  return (
+    <div id="registerNewDataBackground">
+      <h1>Dataadministrasjon</h1>
+      <div id="categoryBox">
+          <Dropdown isOpen={dropdownOpen} toggle={toggle} class="dropdown">
+            <DropdownToggle caret>
+              {showName}
+              </DropdownToggle>
+            <DropdownMenu>
+              <DropdownItem header>Kategorier</DropdownItem>
+              {categories.map(category => (
+                <Tooltip title={category.description}>
+                  <DropdownItem onClick={() => window.location.href = "/manageData/"+category.name}>{category.showName}</DropdownItem>
+                </Tooltip>
+              ))}
+              
+            </DropdownMenu>
+          </Dropdown>
+      </div>
+      <div id="registerNewDataContainer">
+        <div id="registerNewDataTabsContainer">
+          <ul class="nav nav-pills" id="pills-tab" role="tablist">
+              <li class="nav-item">
+                  <a class="nav-link active" id="pills-Game1-tab" data-toggle="pill" href="#pills-Game1" role="tab" aria-controls="pills-Game1" aria-selected="true">Jeg har aldri</a>
+              </li>
+              <li class="nav-item">
+                  <a class="nav-link" id="pills-Game2-tab" data-toggle="pill" href="#pills-Game2" role="tab" aria-controls="pills-Game2" aria-selected="false">Nødt eller sannhet</a>
+              </li>
+              <li class="nav-item">
+                  <a class="nav-link" id="pills-Game3-tab" data-toggle="pill" href="#pills-Game3" role="tab" aria-controls="pills-Game3" aria-selected="false">Pekeleken</a>
+              </li>
+          </ul>
+          <div class="tab-content" id="pills-tabContent">
+            <div class="tab-pane fade show active" id="pills-Game1" role="tabpanel" aria-labelledby="pills-Game1-tab"><NeverHaveIEverOverview category={category}/></div>
+            <div class="tab-pane fade" id="pills-Game2" role="tabpanel" aria-labelledby="pills-Game 2-tab"><TruthOrDareOverview category={category}/></div>
+            <div class="tab-pane fade" id="pills-Game3" role="tabpanel" aria-labelledby="pills-Game3-tab"><PointTowardsWhoOverview category={category}/></div>
           </div>
         </div>
       </div>
-    );
-  }
+    </div>
+  );
 }
 
 export default DataadministrationView;
@@ -53,7 +77,7 @@ class NeverHaveIEverOverview extends Component{
   }
   componentDidMount(){
     let amountOfStatements = 0;
-    let messagesRef = firebaseConfig.database().ref('neverHaveIEver').orderByValue().limitToLast(1000);
+    let messagesRef = firebaseConfig.database().ref('neverHaveIEver/'+this.props.category).orderByValue().limitToLast(1000);
     messagesRef.on('child_added', snapshot => {
       amountOfStatements++;
       let message = { text: snapshot.val(), id: amountOfStatements, db_id: snapshot.key };
@@ -67,13 +91,13 @@ class NeverHaveIEverOverview extends Component{
   addStatement(e){
     e.preventDefault();
     if(this.inputStatement.value.trim() !== ""){
-      firebaseConfig.database().ref('neverHaveIEver').push( this.inputStatement.value );
+      firebaseConfig.database().ref('neverHaveIEver/'+this.props.category).push( this.inputStatement.value );
       this.inputStatement.value = '';
     }
   }
 
   removeStatement(statementId){
-    let dataRef = firebaseConfig.database().ref('neverHaveIEver/'+statementId);
+    let dataRef = firebaseConfig.database().ref('neverHaveIEver/'+ this.props.category + '/'+ statementId);
     dataRef.remove();
   }
   
@@ -122,7 +146,7 @@ class TruthOrDareOverview extends Component{
   }
   componentDidMount(){
     let amountOfStatements = 0;
-    let messagesRef = firebaseConfig.database().ref('truthOrDare').orderByKey().limitToLast(1000);
+    let messagesRef = firebaseConfig.database().ref('truthOrDare/'+this.props.category).orderByKey().limitToLast(1000);
     messagesRef.on('child_added', snapshot => {
       amountOfStatements++;
       let message = { type: snapshot.val().type, text: snapshot.val().text, id: amountOfStatements, db_id: snapshot.key };
@@ -138,7 +162,7 @@ class TruthOrDareOverview extends Component{
     var choiceBox = document.getElementById("choiceTruthOrDare");
     var choiceSelected = choiceBox.options[choiceBox.selectedIndex].text;
     if(this.inputStatement.value.trim() !== ""){
-      firebaseConfig.database().ref('truthOrDare').push({
+      firebaseConfig.database().ref('truthOrDare/'+this.props.category).push({
         type: choiceSelected,
         text: this.inputStatement.value
       });
@@ -147,7 +171,7 @@ class TruthOrDareOverview extends Component{
   }
 
   removeStatement(statementId){
-    let dataRef = firebaseConfig.database().ref('truthOrDare/'+statementId);
+    let dataRef = firebaseConfig.database().ref('truthOrDare/'+this.props.category + '/'+statementId);
     dataRef.remove();
   }
   
@@ -202,7 +226,7 @@ class PointTowardsWhoOverview extends Component{
   }
   componentDidMount(){
     let amountOfStatements = 0;
-    let messagesRef = firebaseConfig.database().ref('pointTowardsWho').orderByKey().limitToLast(1000);
+    let messagesRef = firebaseConfig.database().ref('pointTowardsWho/'+this.props.category).orderByKey().limitToLast(1000);
     messagesRef.on('child_added', snapshot => {
       amountOfStatements++;
       let message = { text: snapshot.val(), id: amountOfStatements, db_id: snapshot.key };
@@ -216,13 +240,13 @@ class PointTowardsWhoOverview extends Component{
   addStatement(e){
     e.preventDefault();
     if(this.inputStatement.value.trim() !== ""){
-      firebaseConfig.database().ref('pointTowardsWho').push( this.inputStatement.value );
+      firebaseConfig.database().ref('pointTowardsWho/'+this.props.category).push( this.inputStatement.value );
       this.inputStatement.value = ''; 
     }
   }
 
   removeStatement(statementId){
-    let dataRef = firebaseConfig.database().ref('pointTowardsWho/'+statementId);
+    let dataRef = firebaseConfig.database().ref('pointTowardsWho/'+this.props.category + '/' +statementId);
     dataRef.remove();
   }
   
