@@ -1,17 +1,15 @@
 import React, { Component } from 'react';
-import firebase from 'firebase';
 import firebaseConfig from '../../firebaseConfig';
 import '../../Styles/Games/statementgame.scss';
 import IconButton from '@material-ui/core/IconButton';
 import Button from '@material-ui/core/Button';
-import ArrowBack from '@material-ui/icons/ArrowBack';
 import ArrowBackIos from '@material-ui/icons/ArrowBackIos';
 const categories = require('../../categories.json')
 
 class NeverHaveIEverView extends Component {
     constructor(props) {
         super(props);
-        var category = this.props.match.params.category;
+        var category = localStorage.getItem('selectedCategory');
         var index = categories.findIndex(function(item, i){
             return item.name === category
         });
@@ -36,7 +34,7 @@ class NeverHaveIEverView extends Component {
     }
 
     showNewStatement(){
-        if(this.state.statementNumber == this.state.statements.length){
+        if(this.state.statementNumber === this.state.statements.length){
             this.setState({statementNumber: 1});
         }else{
             this.setState({statementNumber: (this.state.statementNumber+1)});
@@ -63,7 +61,7 @@ class NeverHaveIEverView extends Component {
                         <h2>{this.state.shownStatement}</h2>
                     </div>
                     <div id="statementgameNextStatementButton">
-                        <Button variant="contained" disabled={this.state.statements.length==0} onClick={() => this.showNewStatement()}>Neste påstand</Button>
+                        <Button variant="contained" disabled={this.state.statements.length===0} onClick={() => this.showNewStatement()}>Neste påstand</Button>
                     </div>
                 </div>
             </div>

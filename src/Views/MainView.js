@@ -13,10 +13,14 @@ const MainView = (props) => {
     const [modal, setModal] = useState(false);
     const toggle = () => {setModal(!modal)};
     const closeBtn = <button className="close" onClick={toggle}>&times;</button>;
-    const [selectedCategory, setSelectedCategory] = React.useState('random');
+    const [selectedCategory, setSelectedCategory] = React.useState(localStorage.getItem('selectedCategory'));
     const handleChange = (event) => {
         setSelectedCategory(event.target.value);
     };
+
+    React.useEffect(() => {
+        localStorage.setItem('selectedCategory', selectedCategory);
+    }, [selectedCategory]);
     
     return (
         
@@ -27,17 +31,17 @@ const MainView = (props) => {
                 <div id="MainViewText"><h4>av Martin Johannes Nilsen</h4></div>
                 <div id="MainViewButtonDiv"> 
                     <div id="MainViewButtons">
-                        <Fab onClick={() => window.location.href = "/neverHaveIEver/"+selectedCategory} aria-labelledby="game-button" variant="extended" id="MainViewButtonsDesign" tabindex="0" alt='Gå til "Jeg har aldri"'>
+                        <Fab onClick={() => window.location.href = "/neverHaveIEver"} aria-labelledby="game-button" variant="extended" id="MainViewButtonsDesign" tabindex="0" alt='Gå til "Jeg har aldri"'>
                             <a>Jeg har aldri</a>
                         </Fab> 
                     </div>
                     <div id="MainViewButtons">
-                        <Fab onClick={() => window.location.href = "/truthOrDare/"+selectedCategory} aria-labelledby="game-button" variant="extended" id="MainViewButtonsDesign" tabindex="0" alt='Gå til "Nødt eller sannhet"'>
+                        <Fab onClick={() => window.location.href = "/truthOrDare"} aria-labelledby="game-button" variant="extended" id="MainViewButtonsDesign" tabindex="0" alt='Gå til "Nødt eller sannhet"'>
                             <a>Nødt eller sannhet</a>
                         </Fab>
                     </div>
                     <div id="MainViewButtons">
-                        <Fab onClick={() => window.location.href = "/PointTowardsWho/"+selectedCategory} aria-labelledby="game-button" variant="extended" id="MainViewButtonsDesign" tabindex="0" alt='Gå til "Pekeleken"'>
+                        <Fab onClick={() => window.location.href = "/PointTowardsWho"} aria-labelledby="game-button" variant="extended" id="MainViewButtonsDesign" tabindex="0" alt='Gå til "Pekeleken"'>
                             <a>Pekeleken</a>
                         </Fab>
                     </div>

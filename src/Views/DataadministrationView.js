@@ -1,5 +1,4 @@
 import React, { Component, useState } from 'react';
-import firebase from 'firebase';
 import firebaseConfig from '../firebaseConfig';
 import '../Styles/Dataadministration.scss';
 import { Dropdown, DropdownToggle, DropdownMenu, DropdownItem } from 'reactstrap';

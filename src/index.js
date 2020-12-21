@@ -19,11 +19,9 @@ ReactDOM.render(
             <Switch>
               <Route path='/manageData/:id' component={DataadministrationView}/>
               <Route path='/manageData' component={DataadministrationView}/>
-              <Route path='/neverHaveIEver/:category' component={NeverHaveIEverView} />
               <Route path='/neverHaveIEver' component={NeverHaveIEverView} />
-              <Route path='/truthOrDare/:category' component={TruthOrDareView} />
               <Route path='/truthOrDare' component={TruthOrDareView} />
-              <Route path='/pointTowardsWho/:category' component={PointTowardsWhoView} />
+              <Route path='/pointTowardsWho/' component={PointTowardsWhoView} />
               <Route path='/' component={MainView} />
             </Switch>
          </div>

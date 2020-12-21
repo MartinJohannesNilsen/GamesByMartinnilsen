@@ -1,17 +1,15 @@
 import React, { Component } from 'react';
-import firebase from 'firebase';
 import firebaseConfig from '../../firebaseConfig';
 import '../../Styles/Games/truthOrDare.scss';
 import IconButton from '@material-ui/core/IconButton';
 import Button from '@material-ui/core/Button';
-import ArrowBack from '@material-ui/icons/ArrowBack';
 import ArrowBackIos from '@material-ui/icons/ArrowBackIos';
 const categories = require('../../categories.json')
 
 class TruthOrDareView extends Component {
     constructor(props) {
         super(props);
-        var category = this.props.match.params.category;
+        var category = localStorage.getItem('selectedCategory');
         var index = categories.findIndex(function(item, i){
             return item.name === category
         });
@@ -26,9 +24,9 @@ class TruthOrDareView extends Component {
         let dbRef = firebaseConfig.database().ref('truthOrDare/'+this.state.category).orderByKey().limitToLast(1000);
         dbRef.once('value', snapshot => {
             snapshot.forEach(childSnap => {
-                if(childSnap.val().type == 'Sannhet'){
+                if(childSnap.val().type === 'Sannhet'){
                     this.setState({ questions: [childSnap.val().text].concat(this.state.questions) });
-                }else if(childSnap.val().type == 'Nødt'){
+                }else if(childSnap.val().type === 'Nødt'){
                     this.setState({ dares: [childSnap.val().text].concat(this.state.dares) });
                 }
             });
@@ -40,7 +38,7 @@ class TruthOrDareView extends Component {
 
     showNewText(isTruth){
         if(isTruth){
-            if(this.state.questionNumber == this.state.questions.length){
+            if(this.state.questionNumber === this.state.questions.length){
                 this.setState({questionNumber: 1});
             }else{
                 this.setState({questionNumber: (this.state.questionNumber+1)});
@@ -49,7 +47,7 @@ class TruthOrDareView extends Component {
             let newText = this.state.questions[(s-1)];
             this.setState({shownText: newText, shownTitle: "Helt ærlig,"});
         }else{
-            if(this.state.dareNumber == this.state.dares.length){
+            if(this.state.dareNumber === this.state.dares.length){
                 this.setState({dareNumber: 1});
             }else{
                 this.setState({dareNumber: (this.state.dareNumber+1)});
@@ -77,8 +75,8 @@ class TruthOrDareView extends Component {
                         <h2>{this.state.shownText}</h2>
                     </div>
                     <div id="truthOrDareNextStatementButton">
-                        <Button variant="contained" disabled={this.state.dares.length==0} onClick={() => this.showNewText(false)}>Nødt</Button>
-                        <Button variant="contained" disabled={this.state.questions.length==0} onClick={() => this.showNewText(true)}>Sannhet</Button>
+                        <Button variant="contained" disabled={this.state.dares.length===0} onClick={() => this.showNewText(false)}>Nødt</Button>
+                        <Button variant="contained" disabled={this.state.questions.length===0} onClick={() => this.showNewText(true)}>Sannhet</Button>
                     </div>
                 </div>
             </div>
